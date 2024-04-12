@@ -26,8 +26,8 @@ transporter.verify().then(console.log).catch(console.error);
 const pool = createPool({
   host: "localhost",
   user: "root",
-  password: "Root@123",
-  database: "userdata",
+  password: "Qwerty&7890",
+  database: "Coalesce",
   connectionLimit: 10,
 });
 
@@ -43,14 +43,29 @@ app.get("/users", (req, res) => {
   });
 });
 
+
+app.post("/login", (req, res) => {
+  const sql = "SELECT  * from users where username='"+req.body.username+"' and password='"+req.body.password+"' limit 1;  ";
+  pool.query(sql, (err, data) => {
+    if (err) return res.json(err);
+    return res.json(data);
+  });
+});
+
+
 app.post("/saveuser", (req, res) => {
   console.log(req.body);
   const sql =
-    "insert into users (username,email,verify) values ('" +
+    "insert into users (username,email,password,verify) values ('" +
     req.body.username +
     "','" +
     req.body.email +
-    "',false);";
+    "','"+req.body.password+"',false);";
+
+
+// "insert into users (name,oss,emai) values('"+req.body.username+"','"+re+"','sdfsdf');"
+
+
   console.log(sql);
   pool.query(sql, (err, data) => {
     if (err) return res.json(err);
@@ -70,7 +85,11 @@ app.post("/verifyuser", (req, res) => {
         from: "dev.ashwinalexander@gmail.com", // sender address
         to: req.body.email, // list of receivers
         subject: "Welcome to ABC Website!", // Subject line
-        html: "<b>Your Email is Verified !!!</b>", // html body
+        html: "<b>Your Email is Verified !!! <br>"+
+        "username : "+req.body.username+
+        "<br>password : "+req.body.password+
+        "<br><a href='http://localhost:3000/login' target='_blank'> Login</a>"+
+        " </br>", // html body
       };
       transporter
         .sendMail(message)

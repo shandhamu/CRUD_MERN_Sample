@@ -1,10 +1,10 @@
 import { useState } from "react";
-import "./App.css";
+import "./Register.css";
 
 function Register() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
-  // const [password, setPassword] = useState("");
+  const [password, setPassword] = useState("");
 
   const saveUser = () => {
     fetch("http://localhost:8081/saveuser", {
@@ -12,6 +12,7 @@ function Register() {
       body: JSON.stringify({
         username: username,
         email: email,
+        password: password,
       }),
       headers: {
         "Content-type": "application/json; charset=UTF-8",
@@ -21,9 +22,10 @@ function Register() {
       .then((data) => {
         console.log(data);
         if (data.affectedRows > 0) {
-          alert("User Save Successfully");
+          alert("User Saved Successfully");
           setUsername("");
           setEmail("");
+          setPassword("");
         }
       })
       .catch((err) => {
@@ -32,10 +34,11 @@ function Register() {
   };
 
   return (
-    <div className="Register">
-      <div className="form">
-        <div>
-          <label for="username">UserName</label>
+    <div className="register-container">
+      <div className="register-form">
+        <h2>Registration Form</h2>
+        <div className="form-group">
+          <label htmlFor="username">Username</label>
           <input
             id="username"
             value={username}
@@ -45,8 +48,8 @@ function Register() {
           />
         </div>
 
-        <div>
-          <label for="email">Email</label>
+        <div className="form-group">
+          <label htmlFor="email">Email</label>
           <input
             id="email"
             type="email"
@@ -56,8 +59,8 @@ function Register() {
             }}
           />
         </div>
-        {/* <div>
-          <label for="password">Password</label>
+        <div className="form-group">
+          <label htmlFor="password">Password</label>
           <input
             id="password"
             type="password"
@@ -66,10 +69,14 @@ function Register() {
               setPassword(e.target.value);
             }}
           />
-        </div> */}
-        <div>
-          <button onClick={saveUser}>Submit</button>
         </div>
+        <div className="form-group">
+          <button className="submit-button" onClick={saveUser}>
+            Submit
+          </button>
+        </div>
+        
+
       </div>
     </div>
   );

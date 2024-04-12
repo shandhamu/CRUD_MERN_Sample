@@ -1,0 +1,27 @@
+.Profile {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  .message {
+    text-align: center;
+  }
+  
+  /* Fade-in animation */
+  .fade-in {
+    animation: fadeInAnimation 2s ease-in forwards;
+  }
+  
+  @keyframes fadeInAnimation {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  

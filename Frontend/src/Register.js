@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { auth } from "./firebase";
 import "./Register.css";
 
 function Register() {
@@ -6,38 +7,45 @@ function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const saveUser = () => {
-    fetch("http://localhost:8081/saveuser", {
-      method: "POST",
-      body: JSON.stringify({
-        username: username,
-        email: email,
-        password: password,
-      }),
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-        if (data.affectedRows > 0) {
-          alert("User Saved Successfully");
-          setUsername("");
-          setEmail("");
-          setPassword("");
-        }
-      })
-      .catch((err) => {
-        console.log(err.message);
-      });
+  const saveUser = async () => {
+    try {
+      await auth.createUserWithEmailAndPassword(email, password);
+      console.log("Logged in successfully");
+    } catch (error) {
+      console.error("Error logging in:", error.message);
+    }
+
+    // fetch("http://localhost:8081/saveuser", {
+    //   method: "POST",
+    //   body: JSON.stringify({
+    //     username: username,
+    //     email: email,
+    //     password: password,
+    //   }),
+    //   headers: {
+    //     "Content-type": "application/json; charset=UTF-8",
+    //   },
+    // })
+    //   .then((response) => response.json())
+    //   .then((data) => {
+    //     console.log(data);
+    //     if (data.affectedRows > 0) {
+    //       alert("User Saved Successfully");
+    //       setUsername("");
+    //       setEmail("");
+    //       setPassword("");
+    //     }
+    //   })
+    //   .catch((err) => {
+    //     console.log(err.message);
+    //   });
   };
 
   return (
     <div className="register-container">
       <div className="register-form">
         <h2>Registration Form</h2>
-        <div className="form-group">
+        {/* <div className="form-group">
           <label htmlFor="username">Username</label>
           <input
             id="username"
@@ -46,7 +54,7 @@ function Register() {
               setUsername(e.target.value);
             }}
           />
-        </div>
+        </div> */}
 
         <div className="form-group">
           <label htmlFor="email">Email</label>
@@ -75,8 +83,6 @@ function Register() {
             Submit
           </button>
         </div>
-        
-
       </div>
     </div>
   );
